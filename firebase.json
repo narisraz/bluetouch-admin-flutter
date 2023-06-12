@@ -1,6 +1,7 @@
 {
   "hosting": {
     "source": ".",
+    "target": "admin",
     "ignore": [
       "firebase.json",
       "**/.*",
