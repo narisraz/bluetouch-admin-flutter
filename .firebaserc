@@ -1,0 +1,13 @@
+{
+  "projects": {},
+  "targets": {
+    "bluetouch-81627": {
+      "hosting": {
+        "admin": [
+          "bluetouch-administration"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
