@@ -1,8 +1,10 @@
 import 'package:bluetouch_admin/auth/bloc/auth_bloc.dart';
+import 'package:bluetouch_admin/auth/models/auth_user.dart';
 import 'package:bluetouch_admin/auth/repository/auth_repository.dart';
 import 'package:bluetouch_admin/auth/views/login_page.dart';
 import 'package:bluetouch_admin/firebase_options.dart';
 import 'package:bluetouch_admin/infrastructure/auth_firebase_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +33,13 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(context),
           child: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
-              context.read<AuthBloc>().add(const AuthEventInitial());
+              FirebaseAuth.instance.authStateChanges().listen((user) {
+                if (user != null) {
+                  context.read<AuthBloc>().add(AuthEventInitial(
+                      authStatus: AuthStatus.loggedIn,
+                      authUser: AuthUser(id: user.uid, email: user.email!)));
+                }
+              });
               if (state.authStatus == AuthStatus.loggedIn) {
                 return ElevatedButton(
                     onPressed: () {
