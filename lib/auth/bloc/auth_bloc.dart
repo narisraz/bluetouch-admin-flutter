@@ -35,9 +35,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _onAuthInitial(
-      AuthEventInitial event, Emitter<AuthState> emit) {
-    emit(AuthState(
-        authStatus: event.authStatus, authenticatedUser: event.authUser));
+      AuthEventInitial event, Emitter<AuthState> emit) async {
+    try {
+      final loggedInUser = await _authProvider.getCurrentLoggedInUser();
+      if (loggedInUser != null) {
+        emit(AuthState(
+            authStatus: AuthStatus.loggedIn,
+            authenticatedUser: event.authUser));
+      } else {
+        emit(const AuthState());
+      }
+    } catch (e) {
+      emit(const AuthState(authStatus: AuthStatus.fail));
+    }
   }
 
   FutureOr<void> _onLogout(
@@ -45,7 +55,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       await _authProvider.logout();
       emit(const AuthState(authStatus: AuthStatus.loggedOut));
-    } on Exception catch (e) {
+    } catch (e) {
       emit(const AuthState(authStatus: AuthStatus.fail));
     }
   }
