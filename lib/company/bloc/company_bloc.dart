@@ -12,17 +12,28 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
   final CompanyRepository companyRepository;
 
   CompanyBloc({required this.companyRepository})
-      : super(CompanyStateInitial()) {
+      : super(const CompanyState(companies: [])) {
     on<CompanyEventAdd>(_onAddCompany);
+    on<CompanyEventGetAll>(_onGetAllCompanies);
   }
 
   FutureOr<void> _onAddCompany(
       CompanyEventAdd event, Emitter<CompanyState> emit) async {
     try {
       await companyRepository.add(Company(name: event.name));
-      emit(const CompanyStateAdded(addCompanyStatus: CompanyStatus.initial));
+      emit(const CompanyState(status: CompanyStatus.added));
     } catch (e) {
-      emit(const CompanyStateAdded(addCompanyStatus: CompanyStatus.fail));
+      emit(const CompanyState(status: CompanyStatus.fail));
+    }
+  }
+
+  FutureOr<void> _onGetAllCompanies(
+      CompanyEventGetAll event, Emitter<CompanyState> emit) async {
+    try {
+      final List<Company> companies = await companyRepository.getAll();
+      emit(CompanyState(companies: companies, status: CompanyStatus.success));
+    } catch (e) {
+      emit(const CompanyState(status: CompanyStatus.fail));
     }
   }
 }
