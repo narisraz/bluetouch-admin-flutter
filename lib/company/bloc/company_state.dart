@@ -9,5 +9,5 @@ class CompanyState extends Equatable {
   const CompanyState({this.status = CompanyStatus.initial, this.companies});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [status, companies];
 }

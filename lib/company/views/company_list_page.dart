@@ -32,6 +32,8 @@ class CompanyListPage extends StatelessWidget {
                           child: Text(
                               'Erreur lors de la récupération des entreprises'));
                     case CompanyStatus.added:
+                      context.read<CompanyBloc>().add(CompanyEventGetAll());
+                      return const Center(child: CircularProgressIndicator());
                     case CompanyStatus.success:
                       return Scrollbar(
                           child: PaginatedDataTable(
@@ -41,7 +43,7 @@ class CompanyListPage extends StatelessWidget {
                             companies: state.companies ?? []),
                         header: const Text('Liste des entreprises'),
                         rowsPerPage: 10,
-                        actions: const [ButtonAddCompany()],
+                        actions: [const ButtonAddCompany().build(context)],
                         columns: const [
                           DataColumn(label: Text("Nom de l'entreprise"))
                         ],
