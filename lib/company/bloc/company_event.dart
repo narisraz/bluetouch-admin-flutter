@@ -12,3 +12,8 @@ class CompanyEventAdd extends CompanyEvent {
   @override
   List<Object?> get props => [];
 }
+
+class CompanyEventGetAll extends CompanyEvent {
+  @override
+  List<Object?> get props => [];
+}

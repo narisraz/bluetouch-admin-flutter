@@ -1,21 +1,13 @@
 part of 'company_bloc.dart';
 
-enum CompanyStatus { initial, success, fail }
+enum CompanyStatus { initial, success, fail, added }
 
-abstract class CompanyState extends Equatable {
-  const CompanyState();
-}
+class CompanyState extends Equatable {
+  final CompanyStatus status;
+  final List<Company>? companies;
 
-class CompanyStateInitial extends CompanyState {
-  @override
-  List<Object?> get props => [];
-}
-
-class CompanyStateAdded extends CompanyState {
-  final CompanyStatus addCompanyStatus;
-
-  const CompanyStateAdded({this.addCompanyStatus = CompanyStatus.initial});
+  const CompanyState({this.status = CompanyStatus.initial, this.companies});
 
   @override
-  List<Object> get props => [addCompanyStatus];
+  List<Object?> get props => [status, companies];
 }
