@@ -3,24 +3,22 @@ import 'package:bluetouch_admin/auth/repository/auth_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class AuthFirebaseProvider extends AuthProvider {
-  late final FirebaseAuth _firebaseAuth;
-  late final FirebaseFirestore _firebaseFirestore;
+class AuthFirebaseRepository extends AuthRepository {
+  final FirebaseAuth firebaseAuth;
+  final FirebaseFirestore firebaseFirestore;
 
-  AuthFirebaseProvider() {
-    _firebaseAuth = FirebaseAuth.instance;
-    _firebaseFirestore = FirebaseFirestore.instance;
-  }
+  AuthFirebaseRepository(
+      {required this.firebaseFirestore, required this.firebaseAuth});
 
   @override
   Future<AuthUser?> login(String email, String password) async {
     try {
-      var userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+      var userCredential = await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       var user = userCredential.user;
       if (user != null) {
         try {
-          var userDocument = await _firebaseFirestore
+          var userDocument = await firebaseFirestore
               .collection("users")
               .where("uid", isEqualTo: user.uid)
               .get();
@@ -43,14 +41,14 @@ class AuthFirebaseProvider extends AuthProvider {
 
   @override
   Future<void> logout() {
-    return _firebaseAuth.signOut();
+    return firebaseAuth.signOut();
   }
 
   @override
   Future<AuthUser?> getCurrentLoggedInUser() async {
-    final user = _firebaseAuth.currentUser;
+    final user = firebaseAuth.currentUser;
     if (user != null) {
-      var userDocument = await _firebaseFirestore
+      var userDocument = await firebaseFirestore
           .collection("users")
           .where("uid", isEqualTo: user.uid)
           .get();

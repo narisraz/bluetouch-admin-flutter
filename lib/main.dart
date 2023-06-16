@@ -1,76 +1,59 @@
-import 'package:bluetouch_admin/auth/bloc/auth_bloc.dart';
+import 'package:bluetouch_admin/auth/models/auth_state.dart';
+import 'package:bluetouch_admin/auth/models/auth_status.dart';
 import 'package:bluetouch_admin/auth/models/auth_user.dart';
-import 'package:bluetouch_admin/auth/repository/auth_repository.dart';
+import 'package:bluetouch_admin/auth/providers/auth_provider.dart';
 import 'package:bluetouch_admin/auth/views/login_page.dart';
-import 'package:bluetouch_admin/company/repository/company_repository.dart';
 import 'package:bluetouch_admin/company/views/company_list_page.dart';
 import 'package:bluetouch_admin/drawer.dart';
 import 'package:bluetouch_admin/firebase_options.dart';
-import 'package:bluetouch_admin/infrastructure/auth_firebase_provider.dart';
-import 'package:bluetouch_admin/infrastructure/company_firestore_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final firestore = FirebaseFirestore.instance;
-
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    FirebaseAuth.instance.authStateChanges().listen((event) {
+      if (event != null) {
+        ref.read(authProvider.notifier).setState(AuthState(
+            status: AuthStatus.success,
+            currentUser: AuthUser(
+                email: event.email!, id: event.uid, role: AuthUserRole.admin)));
+      }
+    });
     return MaterialApp(
       title: 'Bluetouch Admin',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: RepositoryProvider<AuthProvider>(
-        create: (context) => AuthFirebaseProvider(),
-        child: BlocProvider(
-          create: (context) => AuthBloc(context),
-          child: BlocBuilder<AuthBloc, AuthState>(
-            builder: (context, state) {
-              var currentUser = FirebaseAuth.instance.currentUser;
-              if (currentUser != null) {
-                context.read<AuthBloc>().add(AuthEventInitial(
-                    authStatus: AuthStatus.loggedIn,
-                    authUser: AuthUser(
-                        id: currentUser.uid, email: currentUser.email!)));
-              }
-              if (state.authStatus != AuthStatus.loggedIn) {
-                return const LoginPage();
-              }
-              return Scaffold(
-                appBar: AppBar(
-                  title: const Text("Bluetouch Admin"),
-                ),
-                drawer: const AppDrawer(),
-                body: MultiRepositoryProvider(
-                  providers: [
-                    RepositoryProvider<CompanyRepository>(
-                        create: (_) => CompanyFirestoreRepository(firestore)),
-                  ],
-                  child: Container(
-                    padding: const EdgeInsets.all(16.0),
-                    child: const CompanyListPage(),
-                  ),
-                ),
-              );
-            },
+      home: Builder(builder: (context) {
+        if (authState.status != AuthStatus.success) {
+          return const Scaffold(body: LoginPage());
+        }
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text("Bluetouch Admin"),
           ),
-        ),
-      ),
+          drawer: const AppDrawer(),
+          body: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: const CompanyListPage(),
+          ),
+        );
+      }),
     );
   }
 }
