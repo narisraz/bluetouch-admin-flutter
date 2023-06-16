@@ -1,24 +1,17 @@
-import 'package:bluetouch_admin/company/bloc/company_bloc.dart';
+import 'package:bluetouch_admin/company/models/company.dart';
+import 'package:bluetouch_admin/company/providers/company_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CompanyFormDialog extends StatelessWidget {
+class CompanyFormDialog extends ConsumerWidget {
   const CompanyFormDialog({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final formKey = GlobalKey<FormState>();
     var nameController = TextEditingController();
-    addCompany() {
-      if (formKey.currentState!.validate()) {
-        context
-            .read<CompanyBloc>()
-            .add(CompanyEventAdd(name: nameController.text));
-        Navigator.of(context).pop();
-      }
-    }
 
     return AlertDialog(
       title: const Text("Création d'entreprise"),
@@ -34,8 +27,11 @@ class CompanyFormDialog extends StatelessWidget {
                   return null;
                 },
                 onFieldSubmitted: (value) {
-                  if (value.isNotEmpty) {
-                    addCompany();
+                  if (formKey.currentState?.validate() == true) {
+                    ref
+                        .read(companyServiceProvider.notifier)
+                        .save(Company(name: nameController.text));
+                    Navigator.of(context).pop();
                   }
                 },
                 controller: nameController,
@@ -45,7 +41,16 @@ class CompanyFormDialog extends StatelessWidget {
             ],
           )),
       actions: [
-        ElevatedButton(onPressed: addCompany, child: const Text("Valider")),
+        ElevatedButton(
+            onPressed: () {
+              if (formKey.currentState?.validate() == true) {
+                ref
+                    .read(companyServiceProvider.notifier)
+                    .save(Company(name: nameController.text));
+                Navigator.of(context).pop();
+              }
+            },
+            child: const Text("Valider")),
         ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();

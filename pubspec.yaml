@@ -31,9 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.0
-  bloc: ^8.0.0
   equatable: ^2.0.5
-  bloc_test: ^9.1.3
+  hooks_riverpod: ^2.3.6
+  riverpod_annotation: ^2.1.1
   fake_cloud_firestore: ^2.4.1+1
   firebase_core: ^2.13.1
   cloud_firestore: ^4.8.0
@@ -55,6 +55,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner:
+  custom_lint:
+  riverpod_generator: ^2.2.3
+  riverpod_lint: ^1.3.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

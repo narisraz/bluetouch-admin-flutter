@@ -1,12 +1,13 @@
-import 'package:bluetouch_admin/auth/bloc/auth_bloc.dart';
+import 'package:bluetouch_admin/auth/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
     return Drawer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -15,12 +16,7 @@ class AppDrawer extends StatelessWidget {
             child: ListView(
               children: [
                 DrawerHeader(
-                  child: BlocBuilder<AuthBloc, AuthState>(
-                    builder: (context, state) {
-                      return Center(
-                          child: Text(state.authenticatedUser!.email));
-                    },
-                  ),
+                  child: Center(child: Text(authState.currentUser!.email)),
                 ),
                 const ListTile(
                   leading: Icon(Icons.dashboard),
@@ -37,7 +33,7 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.logout),
             title: const Text("Se déconnecter"),
             onTap: () {
-              context.read<AuthBloc>().add(AuthEventLogout());
+              ref.read(authProvider.notifier).logout();
             },
           ),
         ],
