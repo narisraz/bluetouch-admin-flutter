@@ -1,6 +1,4 @@
-import 'package:bluetouch_admin/company/bloc/company_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CompanyFormDialog extends StatelessWidget {
   const CompanyFormDialog({
@@ -11,14 +9,6 @@ class CompanyFormDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     var nameController = TextEditingController();
-    addCompany() {
-      if (formKey.currentState!.validate()) {
-        context
-            .read<CompanyBloc>()
-            .add(CompanyEventAdd(name: nameController.text));
-        Navigator.of(context).pop();
-      }
-    }
 
     return AlertDialog(
       title: const Text("Création d'entreprise"),
@@ -34,9 +24,7 @@ class CompanyFormDialog extends StatelessWidget {
                   return null;
                 },
                 onFieldSubmitted: (value) {
-                  if (value.isNotEmpty) {
-                    addCompany();
-                  }
+                  if (value.isNotEmpty) {}
                 },
                 controller: nameController,
                 decoration:
@@ -45,7 +33,7 @@ class CompanyFormDialog extends StatelessWidget {
             ],
           )),
       actions: [
-        ElevatedButton(onPressed: addCompany, child: const Text("Valider")),
+        ElevatedButton(onPressed: () {}, child: const Text("Valider")),
         ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
