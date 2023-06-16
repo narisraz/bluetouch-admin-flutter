@@ -13,7 +13,7 @@ class ButtonAddCompany extends StatelessWidget {
         showDialog(
             context: context,
             builder: (_) {
-              return const CompanyFormDialog().build(context);
+              return const CompanyFormDialog();
             });
       },
     );

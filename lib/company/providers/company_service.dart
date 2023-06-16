@@ -13,4 +13,8 @@ class CompanyService extends _$CompanyService {
   Stream<Iterable<Company>> getAll() {
     return ref.read(companyRepositoryProvider).getAll();
   }
+
+  Future<void> save(Company company) {
+    return ref.read(companyRepositoryProvider).add(company);
+  }
 }

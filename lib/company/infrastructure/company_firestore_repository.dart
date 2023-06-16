@@ -9,13 +9,9 @@ class CompanyFirestoreRepository extends CompanyRepository {
 
   @override
   Future<void> add(Company company) {
-    try {
-      return _firebaseFirestore
-          .collection("companies")
-          .add({'name': company.name});
-    } catch (e) {
-      return Future.value();
-    }
+    return _firebaseFirestore
+        .collection("companies")
+        .add({'name': company.name});
   }
 
   @override
