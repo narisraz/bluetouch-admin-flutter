@@ -13,4 +13,8 @@ class SaepService extends _$SaepService {
   Future<void> save(Saep saep) {
     return ref.read(saepRepositoryProvider).save(saep);
   }
+
+  Stream<int> countByCompany(String companyId) {
+    return ref.read(saepRepositoryProvider).countByCompany(companyId);
+  }
 }

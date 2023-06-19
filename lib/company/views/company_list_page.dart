@@ -2,6 +2,7 @@ import 'package:bluetouch_admin/company/components/button_add_company.dart';
 import 'package:bluetouch_admin/company/components/button_add_saep.dart';
 import 'package:bluetouch_admin/company/models/company.dart';
 import 'package:bluetouch_admin/company/providers/company_service.dart';
+import 'package:bluetouch_admin/company/providers/saep_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -34,6 +35,7 @@ class CompanyListPage extends ConsumerWidget {
                     actions: const [ButtonAddCompany()],
                     columns: const [
                       DataColumn(label: Text("Nom de l'entreprise")),
+                      DataColumn(label: Text("Nombre de SAEP")),
                       DataColumn(label: Text("Actions")),
                     ],
                   ));
@@ -55,6 +57,20 @@ class CompanyListDataSource extends DataTableSource {
   DataRow? getRow(int index) {
     return DataRow(cells: [
       DataCell(Text(companies[index].name)),
+      DataCell(Consumer(builder: (context, ref, child) {
+        final countByCompany = ref
+            .read(saepServiceProvider.notifier)
+            .countByCompany(companies[index].id!);
+        return StreamBuilder(
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active) {
+              return Text(snapshot.data.toString());
+            }
+            return const Center();
+          },
+          stream: countByCompany,
+        );
+      })),
       DataCell(ButtonAddSaep(
         companyId: companies[index].id!,
       )),

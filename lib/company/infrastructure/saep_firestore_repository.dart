@@ -11,4 +11,13 @@ class SaepFirestoreRepository extends SaepRepository {
   Future<void> save(Saep saep) {
     return _firestore.collection("saep").add(saep.toJson());
   }
+
+  @override
+  Stream<int> countByCompany(String companyId) {
+    return _firestore
+        .collection("saep")
+        .where("companyId", isEqualTo: companyId)
+        .snapshots()
+        .map((event) => event.size);
+  }
 }
