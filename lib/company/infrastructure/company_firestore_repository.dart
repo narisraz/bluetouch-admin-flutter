@@ -26,6 +26,6 @@ class CompanyFirestoreRepository extends CompanyRepository {
   Company _addId(e) {
     Map<String, dynamic> data = e.data();
     data.putIfAbsent('id', () => e.id);
-    return Company.fromJson(e.data());
+    return Company.fromJson(data);
   }
 }

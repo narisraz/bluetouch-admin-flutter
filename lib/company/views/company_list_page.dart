@@ -1,4 +1,5 @@
 import 'package:bluetouch_admin/company/components/button_add_company.dart';
+import 'package:bluetouch_admin/company/components/button_add_saep.dart';
 import 'package:bluetouch_admin/company/models/company.dart';
 import 'package:bluetouch_admin/company/providers/company_service.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,8 @@ class CompanyListPage extends ConsumerWidget {
                     rowsPerPage: 10,
                     actions: const [ButtonAddCompany()],
                     columns: const [
-                      DataColumn(label: Text("Nom de l'entreprise"))
+                      DataColumn(label: Text("Nom de l'entreprise")),
+                      DataColumn(label: Text("Actions")),
                     ],
                   ));
               }
@@ -51,7 +53,12 @@ class CompanyListDataSource extends DataTableSource {
 
   @override
   DataRow? getRow(int index) {
-    return DataRow(cells: [DataCell(Text(companies[index].name))]);
+    return DataRow(cells: [
+      DataCell(Text(companies[index].name)),
+      DataCell(ButtonAddSaep(
+        companyId: companies[index].id!,
+      )),
+    ]);
   }
 
   @override
