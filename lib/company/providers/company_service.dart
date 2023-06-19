@@ -17,4 +17,9 @@ class CompanyService extends _$CompanyService {
   Future<void> save(Company company) {
     return ref.read(companyRepositoryProvider).add(company);
   }
+
+  void setSelectedId(String id) {
+    state = CompanyState(
+        status: state.status, companies: state.companies, selectedId: id);
+  }
 }

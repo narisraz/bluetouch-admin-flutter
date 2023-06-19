@@ -1,5 +1,5 @@
 class Company {
-  late final String? id;
+  final String? id;
   final String name;
 
   Company({this.id, required this.name});

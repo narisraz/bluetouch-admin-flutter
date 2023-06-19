@@ -1,0 +1,1 @@
+enum SaepStatus { initial, added }
