@@ -4,4 +4,6 @@ abstract class SaepRepository {
   Future<void> save(Saep saep);
 
   Stream<int> countByCompany(String companyId);
+
+  Stream<Iterable<Saep>> getAllByCompany(String companyId);
 }

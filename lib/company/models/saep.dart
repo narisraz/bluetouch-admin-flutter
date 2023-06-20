@@ -29,4 +29,15 @@ class Saep {
       'companyId': companyId
     };
   }
+
+  static fromJson(Map<String, dynamic> data) {
+    return Saep(
+        id: data["id"],
+        reservoirSize: double.tryParse('${data['reservoirSize']}'),
+        populationSize: int.tryParse('${data['populationSize']}'),
+        companyId: data['companyId'],
+        name: data["name"],
+        waterResource: WaterResource.values.byName(data['waterResource']),
+        saepType: SaepType.values.byName(data['saepType']));
+  }
 }
