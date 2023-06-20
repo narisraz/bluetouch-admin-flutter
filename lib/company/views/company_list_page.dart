@@ -1,5 +1,6 @@
 import 'package:bluetouch_admin/company/components/button_add_company.dart';
 import 'package:bluetouch_admin/company/components/button_add_saep.dart';
+import 'package:bluetouch_admin/company/components/saep_count_button.dart';
 import 'package:bluetouch_admin/company/models/company.dart';
 import 'package:bluetouch_admin/company/providers/company_service.dart';
 import 'package:bluetouch_admin/company/providers/saep_service.dart';
@@ -63,8 +64,13 @@ class CompanyListDataSource extends DataTableSource {
             .countByCompany(companies[index].id!);
         return StreamBuilder(
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.active) {
-              return Text(snapshot.data.toString());
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
+            if (snapshot.connectionState == ConnectionState.active &&
+                snapshot.data != 0) {
+              return SaepCountButton(
+                  value: snapshot.data!, companyId: companies[index].id!);
             }
             return const Center();
           },

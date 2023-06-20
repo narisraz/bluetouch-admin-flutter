@@ -17,4 +17,8 @@ class SaepService extends _$SaepService {
   Stream<int> countByCompany(String companyId) {
     return ref.read(saepRepositoryProvider).countByCompany(companyId);
   }
+
+  Stream<Iterable<Saep>> getAllByCompanyId(String companyId) {
+    return ref.read(saepRepositoryProvider).getAllByCompany(companyId);
+  }
 }
