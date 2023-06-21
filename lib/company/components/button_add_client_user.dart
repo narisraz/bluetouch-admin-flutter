@@ -5,15 +5,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ButtonAddClientUser extends ConsumerWidget {
   final String companyId;
+  final Widget? icon;
 
-  const ButtonAddClientUser({super.key, required this.companyId});
+  const ButtonAddClientUser({super.key, required this.companyId, this.icon});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Tooltip(
       message: "Ajouter un utilisateur",
       child: IconButton(
-        icon: const Icon(Icons.person),
+        icon: icon ?? const Icon(Icons.person),
         onPressed: () {
           ref.read(companyServiceProvider.notifier).setSelectedId(companyId);
           showDialog(

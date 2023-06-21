@@ -27,4 +27,12 @@ class ClientUserService extends _$ClientUserService {
       return state;
     }
   }
+
+  Stream<int> countByCompany(String companyId) {
+    return ref.read(clientUserRepositoryProvider).countByCompany(companyId);
+  }
+
+  Stream<Iterable<ClientUser>> getAllByCompanyId(String companyId) {
+    return ref.read(clientUserRepositoryProvider).getAllByCompany(companyId);
+  }
 }

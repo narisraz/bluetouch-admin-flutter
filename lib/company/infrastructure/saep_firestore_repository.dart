@@ -35,4 +35,17 @@ class SaepFirestoreRepository extends SaepRepository {
     data.putIfAbsent("id", () => e.id);
     return Saep.fromJson(data);
   }
+
+  @override
+  Stream<Iterable<Saep>> getByIds(List<String?> saepIds) {
+    try {
+      return _firestore
+          .collection("saep")
+          .where(FieldPath.documentId, whereIn: saepIds)
+          .snapshots()
+          .map((event) => event.docs.map((_dataWithId)));
+    } catch (e) {
+      return Stream.value([]);
+    }
+  }
 }

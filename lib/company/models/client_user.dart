@@ -28,4 +28,14 @@ class ClientUser {
       'saepList': saepIdList
     };
   }
+
+  static ClientUser fromJson(Map<String, dynamic> data) {
+    return ClientUser(
+        name: data['name'],
+        firstName: data["firstName"],
+        userName: data["userName"],
+        role: ClientUserRole.values.byName(data["role"]),
+        companyId: data["companyId"],
+        saepIdList: [...data["saepList"]]);
+  }
 }

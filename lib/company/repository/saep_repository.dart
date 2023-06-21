@@ -6,4 +6,6 @@ abstract class SaepRepository {
   Stream<int> countByCompany(String companyId);
 
   Stream<Iterable<Saep>> getAllByCompany(String companyId);
+
+  Stream<Iterable<Saep>> getByIds(List<String?> saepIds);
 }
