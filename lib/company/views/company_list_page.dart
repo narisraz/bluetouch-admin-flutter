@@ -1,3 +1,4 @@
+import 'package:bluetouch_admin/company/components/button_add_client_user.dart';
 import 'package:bluetouch_admin/company/components/button_add_company.dart';
 import 'package:bluetouch_admin/company/components/button_add_saep.dart';
 import 'package:bluetouch_admin/company/components/saep_count_button.dart';
@@ -77,8 +78,16 @@ class CompanyListDataSource extends DataTableSource {
           stream: countByCompany,
         );
       })),
-      DataCell(ButtonAddSaep(
-        companyId: companies[index].id!,
+      DataCell(Wrap(
+        spacing: 8,
+        children: [
+          ButtonAddSaep(
+            companyId: companies[index].id!,
+          ),
+          ButtonAddClientUser(
+            companyId: companies[index].id!,
+          )
+        ],
       )),
     ]);
   }
