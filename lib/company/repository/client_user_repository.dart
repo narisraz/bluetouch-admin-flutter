@@ -4,4 +4,6 @@ abstract class ClientUserRepository {
   Future<String?> save(ClientUser clientUser);
 
   Stream<int> countByCompany(String companyId);
+
+  Stream<Iterable<ClientUser>> getAllByCompany(String companyId);
 }

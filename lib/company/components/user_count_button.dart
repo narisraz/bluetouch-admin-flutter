@@ -1,3 +1,4 @@
+import 'package:bluetouch_admin/company/components/user_list_table.dart';
 import 'package:bluetouch_admin/company/providers/company_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,7 +19,7 @@ class UserCountButton extends ConsumerWidget {
               context: context,
               builder: (_) {
                 return AlertDialog(
-                  content: Container(),
+                  content: const ClientUserListTable(),
                   actions: [
                     ElevatedButton(
                         onPressed: () {

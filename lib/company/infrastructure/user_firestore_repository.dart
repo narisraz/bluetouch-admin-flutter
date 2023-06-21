@@ -31,4 +31,19 @@ class ClientUserFirestoreRepository extends ClientUserRepository {
         .snapshots()
         .map((event) => event.size);
   }
+
+  @override
+  Stream<Iterable<ClientUser>> getAllByCompany(String companyId) {
+    return _firestore
+        .collection("users")
+        .where("companyId", isEqualTo: companyId)
+        .snapshots()
+        .map((event) => event.docs.map((_dataWithId)));
+  }
+
+  ClientUser _dataWithId(e) {
+    Map<String, dynamic> data = e.data();
+    data.putIfAbsent("id", () => e.id);
+    return ClientUser.fromJson(data);
+  }
 }
