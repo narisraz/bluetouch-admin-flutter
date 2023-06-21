@@ -41,7 +41,12 @@ class ClientUserListTable extends ConsumerWidget {
                       source:
                           ClientUserDataSource(data: snapshot.data!.toList()),
                       header: const Text("Liste des utilisateurs"),
-                      actions: [ButtonAddClientUser(companyId: companyId)],
+                      actions: [
+                        ButtonAddClientUser(
+                          companyId: companyId,
+                          icon: const Icon(Icons.add),
+                        ),
+                      ],
                     ),
                   ),
                 ],
