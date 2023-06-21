@@ -2,7 +2,9 @@ import 'package:bluetouch_admin/company/components/button_add_client_user.dart';
 import 'package:bluetouch_admin/company/components/button_add_company.dart';
 import 'package:bluetouch_admin/company/components/button_add_saep.dart';
 import 'package:bluetouch_admin/company/components/saep_count_button.dart';
+import 'package:bluetouch_admin/company/components/user_count_button.dart';
 import 'package:bluetouch_admin/company/models/company.dart';
+import 'package:bluetouch_admin/company/providers/client_user_service.dart';
 import 'package:bluetouch_admin/company/providers/company_service.dart';
 import 'package:bluetouch_admin/company/providers/saep_service.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +40,7 @@ class CompanyListPage extends ConsumerWidget {
                     columns: const [
                       DataColumn(label: Text("Nom de l'entreprise")),
                       DataColumn(label: Text("Nombre de SAEP")),
+                      DataColumn(label: Text("Nombre d'utilisateurs")),
                       DataColumn(label: Text("Actions")),
                     ],
                   ));
@@ -78,6 +81,27 @@ class CompanyListDataSource extends DataTableSource {
           stream: countByCompany,
         );
       })),
+      DataCell(Consumer(
+        builder: (context, ref, child) {
+          final countUserByCompany = ref
+              .read(clientUserServiceProvider.notifier)
+              .countByCompany(companies[index].id!);
+          return StreamBuilder(
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+              if (snapshot.connectionState == ConnectionState.active &&
+                  snapshot.data != 0) {
+                return UserCountButton(
+                    value: snapshot.data!, companyId: companies[index].id!);
+              }
+              return const Center();
+            },
+            stream: countUserByCompany,
+          );
+        },
+      )),
       DataCell(Wrap(
         spacing: 8,
         children: [

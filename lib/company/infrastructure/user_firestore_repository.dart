@@ -22,4 +22,13 @@ class ClientUserFirestoreRepository extends ClientUserRepository {
     }
     return null;
   }
+
+  @override
+  Stream<int> countByCompany(String companyId) {
+    return _firestore
+        .collection("users")
+        .where("companyId", isEqualTo: companyId)
+        .snapshots()
+        .map((event) => event.size);
+  }
 }
